@@ -1,0 +1,7 @@
+train: ../dataset_yolov6/images/train/
+val: ../dataset_yolov6/images/val/
+
+
+# Classes
+nc:  1 # number of classes
+names: ['Plate']  # class names

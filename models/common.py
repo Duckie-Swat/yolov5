@@ -330,7 +330,7 @@ class DetectMultiBackend(nn.Module):
         #   TensorFlow Edge TPU:            *_edgetpu.tflite
         #   PaddlePaddle:                   *_paddle_model
         from models.experimental import attempt_download, attempt_load  # scoped to avoid circular import
-
+        self.num_threads = 4
         super().__init__()
         w = str(weights[0] if isinstance(weights, list) else weights)
         pt, jit, onnx, xml, engine, coreml, saved_model, pb, tflite, edgetpu, tfjs, paddle, triton = self._model_type(w)
@@ -461,7 +461,7 @@ class DetectMultiBackend(nn.Module):
                 interpreter = Interpreter(model_path=w, experimental_delegates=[load_delegate(delegate)])
             else:  # TFLite
                 LOGGER.info(f'Loading {w} for TensorFlow Lite inference...')
-                interpreter = Interpreter(model_path=w)  # load TFLite model
+                interpreter = Interpreter(model_path=w, num_threads=self.num_threads)  # load TFLite model
             interpreter.allocate_tensors()  # allocate
             input_details = interpreter.get_input_details()  # inputs
             output_details = interpreter.get_output_details()  # outputs
